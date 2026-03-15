@@ -42,13 +42,13 @@ This project is born from a fascination with Japanese sword-forging tradition �
 
 ## 🐉 The Five Environments
 
-| Environment | Kanji | Japanese | Subtitle |
-|-------------|-------|----------|----------|
-| 🌸 Sakura | 桜刃 | Sakura-Jin | Cherry Blossom Blade |
-| 🎋 Bamboo | 竹風 | Chikufū | Bamboo Wind |
-| ⛈️ Storm | 雷鳴 | Raimei | Thunder Roar |
-| 🔥 Ember | 焔心 | Enshin | Ember Heart |
-| ❄️ Frost | 霜月 | Shimotsuki | Frost Moon |
+| Environment | Kanji | Japanese   | Subtitle             |
+| ----------- | ----- | ---------- | -------------------- |
+| 🌸 Sakura   | 桜刃  | Sakura-Jin | Cherry Blossom Blade |
+| 🎋 Bamboo   | 竹風  | Chikufū    | Bamboo Wind          |
+| ⛈️ Storm    | 雷鳴  | Raimei     | Thunder Roar         |
+| 🔥 Ember    | 焔心  | Enshin     | Ember Heart          |
+| ❄️ Frost    | 霜月  | Shimotsuki | Frost Moon           |
 
 ## 🦾 Getting Started
 
@@ -132,6 +132,10 @@ npm run dev
 ├── jsconfig.json
 └── package.json
 ```
+
+## 🌐 Site URL
+
+You can visit the live site at [https://3d-saber.vercel.app/](https://3d-saber.vercel.app/). 💻
 
 ## 🏯 License
 
