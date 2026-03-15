@@ -1,0 +1,37 @@
+@use '@/styles/variables' as *;
+
+// ------------------------------+
+//
+// PAGE TRANSITION OVERLAY
+//
+// ------------------------------+
+
+// White overlay - reverse slash reveal after loading ends
+.transition_overlay {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  transform: translateY(-50%);
+  background-color: $white_color;
+  z-index: $z_loading;
+  animation: slashReveal $animation_time_small ease-in-out forwards;
+}
+
+// ==============================
+// REVERSE SLASH ANIMATION
+// ==============================
+
+@keyframes slashReveal {
+  0%,
+  20% {
+    height: 100vh;
+  }
+  80% {
+    height: $border_width;
+  }
+  100% {
+    height: 0;
+  }
+}

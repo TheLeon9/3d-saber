@@ -1,0 +1,22 @@
+@use './variables' as *;
+
+// Scene colors (updated dynamically via ThemeContext)
+:root {
+  --color-primary: #c45c5c;
+  --color-secondary: #e8c4b8;
+  --color-tertiary: #8b3a3a;
+}
+
+// Dark mode — light text, dark gradient tinted by primary
+:root[data-theme='dark'] {
+  --color-text: #{$white_color};
+  --color-gradient-start: color-mix(in srgb, var(--color-primary) 20%, #{$black_color});
+  --color-gradient-end: #{$black_color};
+}
+
+// Light mode — dark text, warm gradient with more scene color to avoid harsh white
+:root[data-theme='light'] {
+  --color-text: #{$black_color};
+  --color-gradient-start: color-mix(in srgb, var(--color-primary) 45%, #{$white_color});
+  --color-gradient-end: color-mix(in srgb, var(--color-secondary) 30%, #{$white_color});
+}

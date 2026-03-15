@@ -1,0 +1,185 @@
+@use '@/styles/variables' as *;
+
+// ------------------------------+
+//
+// SCENE INFO
+//
+// ------------------------------+
+
+// === CONSTANTS ===
+
+// Scene element icon size
+$icon_size: 40px;
+// Scene element icon size on mobile
+$icon_size_mob: 24px;
+// Decoration dot diameter
+$dot_size: $small_margin;
+
+// === WRAPPER ===
+
+// Wrapper - vertical column positioned bottom-left
+.wrapper {
+  position: absolute;
+  bottom: $layout_margin;
+  left: $layout_margin;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $margin;
+
+  @media (max-width: $mobile) {
+    bottom: $layout_margin_mob;
+    left: $layout_margin_mob;
+    gap: $small_small_margin;
+  }
+
+  // ----------------------------------------
+  // Vertical decoration - top (dot then line) — closes in from above
+  // ----------------------------------------
+  .decoration_top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // Appear animation — slide in from top with long delay
+    animation: appearFromTop $animation_time_small ease-out $animation_delay_big both;
+
+    // Thin vertical line
+    .line {
+      width: $border_width;
+      height: $margin;
+      background-color: var(--color-text);
+      opacity: $less_less_opacity;
+      transition: background-color $transition_time;
+
+      @media (max-width: $mobile) {
+        height: $small_margin;
+      }
+    }
+
+    // Fixed 10px dot
+    .dot {
+      width: $dot_size;
+      height: $dot_size;
+      border-radius: $circle_border_radius;
+      background-color: var(--color-text);
+      opacity: $less_less_opacity;
+      transition: background-color $transition_time;
+
+      @media (max-width: $mobile) {
+        width: $small_small_margin;
+        height: $small_small_margin;
+      }
+    }
+  }
+
+  // ----------------------------------------
+  // Vertical decoration - bottom (line then dot) — closes in from below
+  // ----------------------------------------
+  .decoration_bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // Appear animation — slide in from bottom with long delay
+    animation: appearFromBottom $animation_time_small ease-out $animation_delay_big both;
+
+    // Thin vertical line
+    .line {
+      width: $border_width;
+      height: $margin;
+      background-color: var(--color-text);
+      opacity: $less_less_opacity;
+      transition: background-color $transition_time;
+
+      @media (max-width: $mobile) {
+        height: $small_margin;
+      }
+    }
+
+    // Fixed 10px dot
+    .dot {
+      width: $dot_size;
+      height: $dot_size;
+      border-radius: $circle_border_radius;
+      background-color: var(--color-text);
+      opacity: $less_less_opacity;
+      transition: background-color $transition_time;
+
+      @media (max-width: $mobile) {
+        width: $small_small_margin;
+        height: $small_small_margin;
+      }
+    }
+  }
+
+  // ----------------------------------------
+  // Icon container
+  // ----------------------------------------
+  .icon_container {
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // Appear animation — slide in from left after slash closes (backwards only so GSAP transitions can override)
+    animation: appearFromLeft $animation_time_small ease-out $animation_delay backwards;
+
+    // Scene element icon — secondary in dark, tertiary in light
+    .icon {
+      width: $icon_size;
+      height: $icon_size;
+      background-color: var(--color-secondary);
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      transition:
+        background-color $transition_time,
+        mask-image 0s;
+
+      :global(:root[data-theme='light']) & {
+        background-color: var(--color-tertiary);
+      }
+
+      @media (max-width: $mobile) {
+        width: $icon_size_mob;
+        height: $icon_size_mob;
+      }
+    }
+  }
+}
+
+// ==============================
+// ANIMATION
+// ==============================
+
+@keyframes appearFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX($animation_negative_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes appearFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY($animation_negative_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes appearFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY($animation_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,224 @@
+@use '@/styles/variables' as *;
+
+// ------------------------------+
+//
+// SWORD INFO
+//
+// ------------------------------+
+
+// === INFO CONTAINER ===
+
+.info {
+  position: absolute;
+  left: $layout_margin * 4;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: $margin;
+  pointer-events: auto;
+  max-width: 300px;
+
+  @media (max-width: $mobile) {
+    left: $layout_margin_mob * 2;
+    max-width: 180px;
+    gap: $small_small_margin;
+  }
+
+  // ----------------------------------------
+  // Title section
+  // ----------------------------------------
+  .title_block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    // Kanji characters — large for visual weight
+    .title_kanji {
+      font-family: $first_font;
+      font-size: $title_font_size;
+      color: var(--color-primary);
+      align-self: center;
+      transition: color $transition_time;
+      // Appear animation — slide in from top (backwards only so GSAP transitions can override)
+      animation: appearFromTop $animation_time_small ease-out $animation_delay backwards;
+
+      @media (max-width: $mobile) {
+        font-size: $font_size;
+      }
+    }
+
+    // Separator decoration below kanji
+    .decoration {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      // Appear animation — slide in from top with stagger
+      animation: appearFromTop $animation_time_small ease-out ($animation_delay + 0.1s) both;
+
+      .dot {
+        width: $small_margin;
+        height: $small_margin;
+        border-radius: $circle_border_radius;
+        background-color: var(--color-text);
+        opacity: $less_less_opacity;
+        transition: background-color $transition_time;
+
+        @media (max-width: $mobile) {
+          width: $small_small_margin;
+          height: $small_small_margin;
+        }
+      }
+
+      .line {
+        width: $border_width;
+        height: $margin;
+        background-color: var(--color-text);
+        opacity: $less_less_opacity;
+        transition: background-color $transition_time;
+
+        @media (max-width: $mobile) {
+          height: $small_margin;
+        }
+      }
+    }
+
+    // Romanized title — secondary in dark, tertiary in light
+    .title {
+      font-size: $medium_font_size;
+      letter-spacing: $letter_spacing_little;
+      text-transform: uppercase;
+      background: linear-gradient(
+        to bottom,
+        var(--color-primary),
+        $white_color
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transition: background $transition_time;
+      margin-top: $small_margin;
+      // Appear animation — slide in from top with stagger (backwards only so GSAP transitions can override)
+      animation: appearFromTop $animation_time_small ease-out ($animation_delay + 0.2s) backwards;
+
+      :global(:root[data-theme='light']) & {
+        background: linear-gradient(
+          to bottom,
+          var(--color-primary),
+          $black_color
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      @media (max-width: $mobile) {
+        margin-top: $small_small_margin;
+        font-size: $small_small_font_size;
+        letter-spacing: $letter_spacing_little;
+      }
+    }
+
+    // Separator line below romaji
+    .separator {
+      width: $big_margin;
+      height: $border_width;
+      margin-top: $small_small_margin;
+      background-color: var(--color-text);
+      opacity: $less_less_opacity;
+      transition: background-color $transition_time;
+    }
+  }
+
+  // ----------------------------------------
+  // Description section
+  // ----------------------------------------
+  .description_block {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    text-indent: $text_indent;
+
+    // Description text
+    .text {
+      z-index: 2;
+      font-size: $font_size;
+      line-height: 2;
+      text-align: justify;
+      color: var(--color-text);
+      transition: color $transition_time;
+      // Appear animation — fade in with stagger (backwards only so GSAP transitions can override)
+      animation: appearFade $animation_time_small ease-out ($animation_delay + 0.3s) backwards;
+
+      @media (max-width: $mobile) {
+        font-size: $small_small_small_font_size;
+        line-height: $line_height;
+      }
+    }
+  }
+
+  // ----------------------------------------
+  // Kanji watermark — large character behind description text
+  // ----------------------------------------
+  .description_kanji {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+    font-size: 200px;
+    color: var(--color-secondary);
+    z-index: 1;
+    pointer-events: none;
+    user-select: none;
+    transition: color $transition_time;
+    // Appear animation — fade in last (backwards only so GSAP transitions can override)
+    animation: appearFadeLess $animation_time_small ease-out ($animation_delay + 0.4s) backwards;
+
+    :global(:root[data-theme='light']) & {
+      color: var(--color-tertiary);
+    }
+
+    @media (max-width: $mobile) {
+      font-size: 100px;
+    }
+  }
+}
+
+// ==============================
+// ANIMATION
+// ==============================
+
+@keyframes appearFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY($animation_negative_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes appearFade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes appearFadeLess {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: $less_less_opacity;
+  }
+}

@@ -1,0 +1,57 @@
+@use '@/styles/variables' as *;
+
+// ------------------------------+
+//
+// CUSTOM CURSOR
+//
+// ------------------------------+
+
+// Sizes
+$dot_size: 10px;
+$dot_hover_size: 50px;
+
+// Fullscreen container - pointer-events passthrough
+.container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: $z_cursor;
+  opacity: 0;
+  transition: opacity $transition_time;
+
+  &.visible {
+    opacity: 1;
+  }
+
+  // Cursor dot
+  .dot {
+    position: absolute;
+    width: $dot_size;
+    height: $dot_size;
+    margin: calc(-#{$dot_size} / 2);
+    border-radius: $circle_border_radius;
+    background: var(--color-primary);
+    transition:
+      width $transition_time,
+      height $transition_time,
+      margin $transition_time,
+      background $transition_time,
+      border $transition_time;
+
+    // Hovering interactive element: grow into a ring outline
+    &.hovering {
+      width: $dot_hover_size;
+      height: $dot_hover_size;
+      margin: calc(-#{$dot_hover_size} / 2);
+      background: transparent;
+      border: $border_width solid var(--color-primary);
+    }
+  }
+}
+
+// Disable custom cursor on touch devices
+@media (hover: none) and (pointer: coarse) {
+  .container {
+    display: none;
+  }
+}

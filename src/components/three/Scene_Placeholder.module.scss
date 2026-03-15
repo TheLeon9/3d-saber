@@ -1,0 +1,76 @@
+@use '@/styles/variables' as *;
+
+// ------------------------------+
+//
+// SCENE PLACEHOLDER
+//
+// ------------------------------+
+
+// Fullscreen canvas layer
+.canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: $z_canvas;
+
+  // ----------------------------------------
+  // Background gradient — transitions between scenes via CSS variables
+  // ----------------------------------------
+  .gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      var(--color-gradient-start),
+      var(--color-gradient-end)
+    );
+    transition: background $transition_time ease;
+  }
+
+  // ----------------------------------------
+  // Three.js particle canvas — transparent overlay
+  // ----------------------------------------
+  .three_canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  // ----------------------------------------
+  // Decorative moon — centered, inverse theme color
+  // ----------------------------------------
+  .moon_container {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    z-index: 0;
+
+    .moon {
+      width: 45%;
+      aspect-ratio: 200 / 180;
+      background-color: var(--color-secondary);
+      mask-image: url('/img/background/moon.svg');
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      opacity: 0; // Hidden until GSAP appear animation
+      transform: translateX(-$big_margin) translateY(-$big_margin);
+      transition: background-color $transition_time ease;
+
+      :global(:root[data-theme='light']) & {
+        background-color: var(--color-tertiary);
+      }
+
+      @media (max-width: $mobile) {
+        width: 50%;
+        transform: translateX(-$margin) translateY(-$margin);
+      }
+    }
+  }
+}

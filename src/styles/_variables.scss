@@ -1,0 +1,96 @@
+// ===== COLORS =====
+
+$black_color: #050505;                    // Near-black base
+$white_color: #f8f8ff;                    // Ghost white base
+$main_color: #6b7db3;                     // Slate blue accent
+// $main_color: #b89c3c;
+$second_color: #6b8fa3;                   // Steel blue accent
+
+// ===== BORDER =====
+
+$small_border_radius: 4px;                // Subtle rounding
+$border_radius: 10px;                     // Standard rounding
+$circle_border_radius: 50%;               // Perfect circle
+$border_width: 1px;                       // Thin decorative lines
+$border_width_big: 2px;                   // Emphasized lines
+
+// ===== FONTS =====
+
+$first_font: var(--font-cinzel), serif;           // Cinzel — headings, kanji labels
+$second_font: var(--font-nunito), sans-serif;     // Nunito — body text, UI labels
+$font_weight_bold: 900;
+$font_weight_regular: 400;
+
+// ===== FONT SIZE =====
+
+$small_small_small_font_size_mob: 8px;    // Smallest mobile text
+$small_small_small_font_size: 10px;       // Smallest desktop text
+$small_small_font_size: 12px;             // Small UI labels
+$small_font_size: 14px;                   // Standard UI text
+$font_size: 16px;                         // Base body text
+$medium_font_size: 18px;                  // Emphasized text
+$big_font_size: 24px;                     // Section headings
+$title_font_size: 32px;                   // Page titles
+$hero_font_size: 64px;                    // Hero text
+
+// ===== TEXT =====
+
+$text_indent: 20px;                       // Paragraph indent
+$letter_spacing: normal;                  // Default spacing
+$letter_spacing_little_mob: 1px;          // Subtle spacing mobile
+$letter_spacing_little: 2px;              // Subtle spacing
+$letter_spacing_big: 6px;                 // Wide spacing
+$letter_spacing_loading: 10px;            // Loading screen text
+$line_height: normal;                     // Default line height
+
+// ===== TRANSITION =====
+
+$transition: 0.6s all;                    // Shorthand for all properties
+$transition_time: 0.6s;                   // Duration only
+
+// ===== SCALE =====
+
+$animation_scale: 1.2;                    // Hover/active scale factor
+
+// ===== ANIMATIONS =====
+
+$animation_delay: 0.4s;                   // Stagger delay between elements
+$animation_delay_big: 0.8s;               // Late appear delay (decorations)
+$animation_time_small: 0.4s;              // Quick animations
+$animation_time: 1s;                      // Standard animations
+$animation_time_big: 2s;                  // Slow/cinematic animations
+$animation_margin: 26px;                  // Slide-in offset
+$animation_negative_margin: -26px;        // Slide-out offset
+
+// ===== MARGIN =====
+
+$small_small_margin: 5px;                 // Tight spacing
+$small_margin: 10px;                      // Compact spacing
+$margin: 20px;                            // Standard spacing
+$big_margin: 40px;                        // Generous spacing
+
+$layout_margin: 20px;                     // UI edge padding (desktop)
+$layout_margin_mob: 10px;                 // UI edge padding (mobile)
+
+// ===== OPACITY =====
+
+$less_opacity: 0.6;                       // Subtle fade
+$less_less_opacity: 0.4;                  // Strong fade
+
+// ===== BREAKPOINTS =====
+
+$mobile: 1000px;                          // Mobile breakpoint
+
+// ===== Z-INDEX =====
+
+$z_canvas: 1;                             // Three.js canvas
+$z_content: 10;                           // Page content
+$z_ui: 100;                               // UI overlays
+$z_loading: 500;                          // Loading screen
+$z_cursor: 1000;                          // Custom cursor
+
+// ===== SHADOW =====
+
+$shadow_blur: 10px;                       // Glow blur radius
+$shadow_spread: 4px;                      // Glow spread distance
+$shadow_box: 0 0px 10px 2px var(--color-primary); // Standard box shadow

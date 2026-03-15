@@ -1,0 +1,240 @@
+@use '@/styles/variables' as *;
+
+// ------------------------------+
+//
+// MODE TOGGLE
+//
+// ------------------------------+
+
+// === CONSTANTS ===
+
+// Toggle icon size
+$icon_size: 40px;
+// Toggle icon size on mobile
+$icon_size_mob: 24px;
+// Sun/Moon indicator size
+$indicator_size: 80px;
+// Sun/Moon indicator size on mobile
+$indicator_size_mob: 40px;
+// Decoration dot diameter
+$dot_size: $small_margin;
+
+// === WRAPPER ===
+
+// Wrapper - vertical column positioned top-right
+.wrapper {
+  position: absolute;
+  top: $layout_margin;
+  right: $layout_margin;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $margin;
+
+  @media (max-width: $mobile) {
+    top: $layout_margin_mob;
+    right: $layout_margin_mob;
+    gap: $small_small_margin;
+  }
+
+  // Hover state — icon scales up
+  &:hover .toggle .icon {
+    transform: scale($animation_scale);
+  }
+
+  // ----------------------------------------
+  // Vertical decoration - top — closes in from above
+  // ----------------------------------------
+  .decoration_top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // Appear animation — slide in from top with long delay
+    animation: appearFromTop $animation_time_small ease-out $animation_delay_big both;
+
+    // Thin vertical line
+    .line {
+      width: $border_width;
+      height: $margin;
+      background-color: var(--color-text);
+      opacity: $less_less_opacity;
+      transition: background-color $transition_time;
+
+      @media (max-width: $mobile) {
+        height: $small_margin;
+      }
+    }
+
+    // Fixed 10px dot
+    .dot {
+      width: $dot_size;
+      height: $dot_size;
+      border-radius: $circle_border_radius;
+      background-color: var(--color-text);
+      opacity: $less_less_opacity;
+      transition: background-color $transition_time;
+
+      @media (max-width: $mobile) {
+        width: $small_small_margin;
+        height: $small_small_margin;
+      }
+    }
+  }
+
+  // ----------------------------------------
+  // Vertical decoration - bottom — closes in from below
+  // ----------------------------------------
+  .decoration_bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // Appear animation — slide in from bottom with long delay
+    animation: appearFromBottom $animation_time_small ease-out $animation_delay_big both;
+
+    // Thin vertical line
+    .line {
+      width: $border_width;
+      height: $margin;
+      background-color: var(--color-text);
+      opacity: $less_less_opacity;
+      transition: background-color $transition_time;
+
+      @media (max-width: $mobile) {
+        height: $small_margin;
+      }
+    }
+
+    // Fixed 10px dot
+    .dot {
+      width: $dot_size;
+      height: $dot_size;
+      border-radius: $circle_border_radius;
+      background-color: var(--color-text);
+      opacity: $less_less_opacity;
+      transition: background-color $transition_time;
+
+      @media (max-width: $mobile) {
+        width: $small_small_margin;
+        height: $small_small_margin;
+      }
+    }
+  }
+
+  // ----------------------------------------
+  // Toggle button
+  // ----------------------------------------
+  .toggle {
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    // Appear animation — slide in from right after slash closes
+    animation: appearFromRight $animation_time_small ease-out $animation_delay both;
+
+    // Icon
+    .icon {
+      width: $icon_size;
+      height: $icon_size;
+      background-color: var(--color-secondary);
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      transition:
+        background-color $transition_time,
+        mask-image 0s,
+        transform $animation_time_small ease;
+
+      :global(:root[data-theme='light']) & {
+        background-color: var(--color-tertiary);
+      }
+
+      @media (max-width: $mobile) {
+        width: $icon_size_mob;
+        height: $icon_size_mob;
+      }
+    }
+
+    .icon_dark {
+      mask-image: url('/img/toggle/lantern-dark.svg');
+    }
+
+    .icon_light {
+      mask-image: url('/img/toggle/lantern-light.svg');
+    }
+  }
+
+  // ----------------------------------------
+  // Sun / Moon indicator
+  // ----------------------------------------
+  .mode_indicator {
+    position: absolute;
+    top: 50%;
+    left: calc(-#{$indicator_size} - #{$big_margin});
+    transform: translateY(-50%);
+    width: $indicator_size;
+    height: $indicator_size;
+    background-color: var(--color-secondary);
+    opacity: 0; // Hidden until GSAP appear — CSS animation conflicts with GSAP toggle
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+
+    :global(:root[data-theme='light']) & {
+      background-color: var(--color-tertiary);
+    }
+
+    @media (max-width: $mobile) {
+      width: $indicator_size_mob;
+      height: $indicator_size_mob;
+      left: calc(-#{$indicator_size_mob} - #{$margin});
+    }
+
+    &.indicator_light {
+      mask-image: url('/img/decoration/sun-light.svg');
+    }
+
+    &.indicator_dark {
+      mask-image: url('/img/decoration/moon-dark.svg');
+    }
+  }
+}
+
+// ==============================
+// ANIMATION
+// ==============================
+
+@keyframes appearFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX($animation_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes appearFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY($animation_negative_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes appearFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY($animation_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

@@ -1,0 +1,358 @@
+@use '@/styles/variables' as *;
+
+// ------------------------------+
+//
+// LOADING SCREEN
+//
+// ------------------------------+
+
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: $black_color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: $z_loading;
+  overflow: hidden;
+
+  // ==============================
+  // BACKGROUND IMAGE
+  // ==============================
+
+  .background_img_cont {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    // Pulsing glow behind the moon — delayed until entrance finishes
+    animation: moonPulse $animation_time_big ease-in-out $animation_delay
+      infinite both;
+
+    .background_img {
+      width: 45%;
+      aspect-ratio: 200 / 180;
+      background-color: var(--color-primary);
+      -webkit-mask-image: url('/img/background/moon.svg');
+      mask-image: url('/img/background/moon.svg');
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      // Starts hidden, moonAppear reveals it
+      opacity: 0;
+      transform: translateX(-#{$big_margin}) translateY(-#{$big_margin});
+      animation: moonAppear $animation_time ease-out forwards;
+
+      @media (max-width: $mobile) {
+        width: 50%;
+        transform: translateX(-#{$margin}) translateY(-#{$margin});
+        animation: moonAppearMob $animation_time ease-out forwards;
+      }
+    }
+  }
+
+  // ==============================
+  // FRONT IMAGE
+  // ==============================
+
+  .front_img_cont {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    // Glow behind the ronin silhouette
+    filter: drop-shadow(0 0 $shadow_spread var(--color-primary));
+    // Emerges from the shadow after a short delay
+    opacity: 0;
+    animation: roninAppear $animation_time ease-out $animation_delay both;
+
+    .front_img {
+      height: 80%;
+      aspect-ratio: 200 / 180;
+      background-color: $black_color;
+      -webkit-mask-image: url('/img/background/ronin.svg');
+      mask-image: url('/img/background/ronin.svg');
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center bottom;
+      mask-position: center bottom;
+      transform: translateY($margin);
+
+      @media (max-width: $mobile) {
+        height: 70%;
+      }
+    }
+  }
+
+  // ==============================
+  // TITLE
+  // ==============================
+
+  .title_cont {
+    z-index: 2;
+    filter: drop-shadow(0 0 $shadow_spread $black_color);
+
+    .title {
+      font-size: 300px;
+      // Same gradient as Corner Text — scene-aware
+      background: linear-gradient(
+        to bottom,
+        var(--color-primary),
+        $white_color
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: $letter_spacing_loading;
+      text-transform: uppercase;
+      margin: 0;
+      // Brush stroke reveal — sweeps left to right
+      clip-path: inset(0 100% 0 0);
+      animation: brushReveal $animation_time ease-out $animation_delay both;
+
+      @media (max-width: $mobile) {
+        font-size: 100px;
+      }
+    }
+  }
+
+  // ==============================
+  // NOTICE
+  // ==============================
+
+  .notice_cont {
+    position: absolute;
+    bottom: $layout_margin;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    // Delayed so it appears after the title reveals
+    animation: slideFromBottom $animation_time ease-out;
+
+    @media (max-width: $mobile) {
+      bottom: $layout_margin_mob;
+    }
+
+    &::before {
+      content: '';
+      width: 400px;
+      height: $border_width;
+      background-color: $white_color;
+      position: absolute;
+      top: -#{$margin};
+
+      @media (max-width: $mobile) {
+        width: 200px;
+        top: -#{$small_margin};
+      }
+    }
+
+    .notice {
+      font-size: $small_small_font_size;
+      color: $white_color; // Loading so we rewrite (No Dark or Light Mode)
+      text-transform: uppercase;
+      letter-spacing: $letter_spacing_little;
+
+      @media (max-width: $mobile) {
+        font-size: $small_small_small_font_size_mob;
+        letter-spacing: $letter_spacing;
+      }
+    }
+  }
+
+  // ==============================
+  // CORNER SHURIKENS
+  // ==============================
+
+  .shuriken {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: var(--color-primary);
+    mask-image: url('/img/decoration/shuriken.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    opacity: $less_opacity;
+    z-index: 2;
+    // Fade in after the title reveals
+    animation: shurikenAppear $animation_time ease-out $animation_delay both;
+
+    @media (max-width: $mobile) {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .top_left {
+    top: $layout_margin;
+    left: $layout_margin;
+  }
+
+  .top_right {
+    top: $layout_margin;
+    right: $layout_margin;
+  }
+
+  .bottom_left {
+    bottom: $layout_margin;
+    left: $layout_margin;
+  }
+
+  .bottom_right {
+    bottom: $layout_margin;
+    right: $layout_margin;
+  }
+
+  // ==============================
+  // SLASH FLASH (exit animation)
+  // ==============================
+
+  .flash_line_right,
+  .flash_line_left {
+    position: absolute;
+    top: 50%;
+    width: 0;
+    height: $border_width;
+    transform: translateY(-50%);
+    background-color: $white_color;
+    z-index: 10;
+    // Two-phase animation: sweep left-to-right, then expand vertically
+    animation:
+      slashSweep $animation_time_small ease-in forwards,
+      slashGrow $animation_time ease-in-out $animation_delay forwards;
+  }
+
+  .flash_line_left {
+    right: 50%;
+  }
+
+  .flash_line_right {
+    left: 50%;
+  }
+}
+
+// ==============================
+// ENTRANCE ANIMATIONS
+// ==============================
+
+// Moon fades in while scaling down — emerging from behind clouds
+@keyframes moonAppear {
+  0% {
+    opacity: 0;
+    transform: translateX(-$big_margin) translateY(-$big_margin)
+      scale($animation_scale);
+  }
+  100% {
+    opacity: $less_less_opacity;
+    transform: translateX(-$big_margin) translateY(-$big_margin) scale(1);
+  }
+}
+
+// Moon mobile variant — smaller offset
+@keyframes moonAppearMob {
+  0% {
+    opacity: 0;
+    transform: translateX(-$margin) translateY(-$margin) scale($animation_scale);
+  }
+  100% {
+    opacity: $less_less_opacity;
+    transform: translateX(-$margin) translateY(-$margin) scale(1);
+  }
+}
+
+// Ronin silhouette rises from the shadows
+@keyframes roninAppear {
+  0% {
+    opacity: 0;
+    transform: translateY($big_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Title sweeps left to right like a calligraphy brush stroke
+@keyframes brushReveal {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+// Shurikens fade in from invisible
+@keyframes shurikenAppear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: $less_opacity;
+  }
+}
+
+// ==============================
+// LOOP ANIMATIONS
+// ==============================
+
+@keyframes moonPulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 $shadow_spread var(--color-primary))
+      drop-shadow(0 0 $shadow_spread var(--color-primary));
+  }
+  50% {
+    filter: drop-shadow(0 0 $shadow_blur var(--color-primary))
+      drop-shadow(0 0 $shadow_blur var(--color-primary));
+  }
+}
+
+// Phase 1 — line sweeps from left to right
+@keyframes slashSweep {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+// Phase 2 — line expands vertically to fill the screen
+@keyframes slashGrow {
+  0% {
+    height: $border_width;
+  }
+  100% {
+    height: 100vh;
+  }
+}
+
+@keyframes slideFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY($animation_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

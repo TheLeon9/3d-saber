@@ -1,0 +1,89 @@
+@use '@/styles/variables' as *;
+
+// ------------------------------+
+//
+// CORNER TEXT
+//
+// ------------------------------+
+
+// Brand container - top-left corner
+.brand {
+  position: absolute;
+  top: $layout_margin;
+  left: $layout_margin;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  // Appear animation — slide in from left after slash closes
+  animation: appearFromLeft $animation_time_small ease-out $animation_delay both;
+
+  @media (max-width: $mobile) {
+    top: $layout_margin_mob;
+    left: $layout_margin_mob;
+  }
+
+  // Brand text row — kanji + name side by side
+  .brand_row {
+    display: flex;
+    align-items: center;
+    gap: $small_margin;
+
+    // Kanji character
+    .brand_kanji {
+      font-family: $first_font;
+      font-size: $title_font_size;
+      color: var(--color-primary);
+
+      @media (max-width: $mobile) {
+        font-size: $medium_font_size;
+      }
+    }
+
+    // Brand name — gradient primary → white (dark) / primary → black (light)
+    .brand_name {
+      font-size: $big_font_size;
+      letter-spacing: $letter_spacing_little;
+      background: linear-gradient(
+        to bottom,
+        var(--color-primary),
+        $white_color
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transition: background $transition_time;
+
+      :global(:root[data-theme='light']) & {
+        background: linear-gradient(
+          to bottom,
+          var(--color-primary),
+          $black_color
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      @media (max-width: $mobile) {
+        font-size: $medium_font_size;
+        letter-spacing: $letter_spacing_little;
+      }
+    }
+  }
+}
+
+// ==============================
+// ANIMATION
+// ==============================
+
+@keyframes appearFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX($animation_negative_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

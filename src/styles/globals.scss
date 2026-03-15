@@ -1,0 +1,97 @@
+@use '@/styles/themes';
+@use '@/styles/variables' as *;
+
+// ============================
+// RESET & BASE STYLES
+// ============================
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow: hidden;
+  letter-spacing: $letter_spacing;
+  cursor: none;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));
+  transition: color $transition_time;
+}
+
+// ============================
+// TYPOGRAPHY
+// ============================
+
+h1,
+h2 {
+  font-family: $first_font;
+  color: var(--color-text);
+  transition: color $transition_time;
+  font-weight: $font_weight_bold;
+}
+
+p {
+  font-family: $second_font;
+  font-weight: $font_weight_regular;
+  color: var(--color-text);
+  transition: color $transition_time;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+label {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: none;
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+// ============================
+// SELECTION
+// ============================
+
+*::selection {
+  background-color: $black_color;
+  color: var(--color-primary);
+}
+
+*::-moz-selection {
+  background-color: $black_color;
+  color: var(--color-primary);
+}
+
+// ============================
+// SCROLLBAR
+// ============================
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+// ============================
+// FULLSCREEN CANVAS
+// ============================
+
+.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: $z_canvas;
+}

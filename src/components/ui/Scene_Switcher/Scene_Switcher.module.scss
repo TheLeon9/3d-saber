@@ -1,0 +1,251 @@
+@use '@/styles/variables' as *;
+
+// ------------------------------+
+//
+// SCENE SWITCHER
+//
+// ------------------------------+
+
+// === CONSTANTS ===
+
+// Sizes
+$circle_size: 60px;
+$circle_size_mob: 40px;
+$sep_dot_size: $small_margin;
+$sep_dot_size_mob: $small_small_margin;
+$shuriken_size: 40px;
+$shuriken_size_mob: 20px;
+$sep_line_width: 60px;
+$sep_line_width_mob: calc($margin + $small_margin);
+
+// === SWITCHER CONTAINER ===
+
+// Switcher container - bottom center
+.switcher {
+  position: absolute;
+  bottom: $layout_margin;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $small_margin;
+  pointer-events: auto;
+
+  @media (max-width: $mobile) {
+    gap: $small_small_margin;
+    bottom: $layout_margin_mob;
+  }
+
+  // ----------------------------------------
+  // Scene subtitle text
+  // ----------------------------------------
+  .scene_name {
+    font-family: $first_font;
+    font-size: $medium_font_size;
+    font-weight: $font_weight_bold;
+    letter-spacing: $letter_spacing_little;
+    text-transform: uppercase;
+    background: linear-gradient(
+      to bottom,
+      var(--color-primary),
+      $white_color
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: background $transition_time;
+    // Appear animation — slide in from top after row (backwards only so GSAP transitions can override)
+    animation: appearFromTop $animation_time_small ease-out ($animation_delay + 0.1s) backwards;
+
+    :global(:root[data-theme='light']) & {
+      background: linear-gradient(
+        to bottom,
+        var(--color-primary),
+        $black_color
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @media (max-width: $mobile) {
+      font-size: $small_small_font_size;
+      letter-spacing: $letter_spacing_little;
+    }
+  }
+
+  // ----------------------------------------
+  // Scene row — all 5 scenes in horizontal line
+  // ----------------------------------------
+  .scene_row {
+    display: flex;
+    align-items: center;
+    // Appear animation — slide in from bottom after slash closes
+    animation: appearFromBottom $animation_time_small ease-out $animation_delay both;
+  }
+
+  // Each scene item wraps separator + circle
+  .scene_item {
+    display: flex;
+    align-items: center;
+  }
+
+  // ----------------------------------------
+  // Separator: dot — line (shuriken on top) — dot
+  // ----------------------------------------
+  .separator {
+    display: flex;
+    align-items: center;
+    margin: 0 $small_margin;
+    position: relative;
+
+    @media (max-width: $mobile) {
+      margin: 0 $small_small_margin;
+    }
+  }
+
+  // Small dot — text color (black/white depending on mode)
+  .sep_dot {
+    width: $sep_dot_size;
+    height: $sep_dot_size;
+    border-radius: $circle_border_radius;
+    background-color: var(--color-text);
+    opacity: $less_less_opacity;
+    transition: background-color $transition_time;
+
+    @media (max-width: $mobile) {
+      width: $sep_dot_size_mob;
+      height: $sep_dot_size_mob;
+    }
+  }
+
+  // Single continuous line
+  .sep_line {
+    width: $sep_line_width;
+    height: $border_width;
+    background-color: var(--color-text);
+    opacity: $less_less_opacity;
+    transition: background-color $transition_time;
+
+    @media (max-width: $mobile) {
+      width: $sep_line_width_mob;
+    }
+  }
+
+  // Shuriken — centered on top of the separator
+  .shuriken {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: $shuriken_size;
+    height: $shuriken_size;
+    background-color: var(--color-secondary);
+    mask-image: url('/img/decoration/shuriken.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    opacity: $less_opacity;
+    transition: background-color $transition_time;
+
+    :global(:root[data-theme='light']) & {
+      background-color: var(--color-tertiary);
+    }
+
+    @media (max-width: $mobile) {
+      width: $shuriken_size_mob;
+      height: $shuriken_size_mob;
+    }
+  }
+
+  // ----------------------------------------
+  // Scene circle
+  // ----------------------------------------
+  .scene_circle {
+    width: $circle_size;
+    height: $circle_size;
+    border-radius: $circle_border_radius;
+    border: none;
+    padding: 0;
+    cursor: none;
+    position: relative;
+    opacity: $less_opacity;
+    transition:
+      background-color $transition_time,
+      transform $animation_time_small ease,
+      opacity $animation_time_small ease;
+
+    // Yin-yang mask overlay
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: var(--color-text);
+      mask-image: url('/img/decoration/yin-yang.svg');
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      opacity: 0.4;
+      transition: background-color $transition_time;
+    }
+
+    // Color glow behind
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: $circle_border_radius;
+      background: var(--scene-color);
+      opacity: 0.15;
+      filter: blur($shadow_blur);
+      z-index: -1;
+      transition: background $transition_time;
+    }
+
+    &:hover:not(:disabled) {
+      transform: scale($animation_scale);
+    }
+
+    &:disabled {
+      cursor: none;
+    }
+
+    @media (max-width: $mobile) {
+      width: $circle_size_mob;
+      height: $circle_size_mob;
+    }
+  }
+
+  // Active circle — full opacity, inactive ones are faded
+  .scene_circle_active {
+    opacity: 1;
+    cursor: none;
+  }
+}
+
+// ==============================
+// ANIMATION
+// ==============================
+
+@keyframes appearFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY($animation_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes appearFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY($animation_negative_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

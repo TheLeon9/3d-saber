@@ -1,0 +1,300 @@
+@use '@/styles/variables' as *;
+
+// ------------------------------+
+//
+// SOUND TOGGLE
+//
+// ------------------------------+
+
+// === CONSTANTS ===
+
+// Toggle icon size
+$icon_size: 40px;
+// Toggle icon size on mobile
+$icon_size_mob: 24px;
+// Decoration dot diameter
+$dot_size: $small_margin;
+
+// === WRAPPER ===
+
+// Wrapper - vertical column positioned bottom-right
+.wrapper {
+  position: absolute;
+  bottom: $layout_margin;
+  right: $layout_margin;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $margin;
+
+  @media (max-width: $mobile) {
+    bottom: $layout_margin_mob;
+    right: $layout_margin_mob;
+    gap: $small_small_margin;
+  }
+
+  // Hover state — icon scales up
+  &:hover .toggle_row .toggle .icon {
+    transform: scale($animation_scale);
+  }
+
+  // ----------------------------------------
+  // Vertical decoration - top — closes in from above
+  // ----------------------------------------
+  .decoration_top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // Appear animation — slide in from top with long delay
+    animation: appearFromTop $animation_time_small ease-out $animation_delay_big both;
+
+    // Thin vertical line
+    .line {
+      width: $border_width;
+      height: $margin;
+      background-color: var(--color-text);
+      opacity: $less_less_opacity;
+      transition: background-color $transition_time;
+
+      @media (max-width: $mobile) {
+        height: $small_margin;
+      }
+    }
+
+    // Fixed 10px dot
+    .dot {
+      width: $dot_size;
+      height: $dot_size;
+      border-radius: $circle_border_radius;
+      background-color: var(--color-text);
+      opacity: $less_less_opacity;
+      transition: background-color $transition_time;
+
+      @media (max-width: $mobile) {
+        width: $small_small_margin;
+        height: $small_small_margin;
+      }
+    }
+  }
+
+  // ----------------------------------------
+  // Vertical decoration - bottom — closes in from below
+  // ----------------------------------------
+  .decoration_bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // Appear animation — slide in from bottom with long delay
+    animation: appearFromBottom $animation_time_small ease-out $animation_delay_big both;
+
+    // Thin vertical line
+    .line {
+      width: $border_width;
+      height: $margin;
+      background-color: var(--color-text);
+      opacity: $less_less_opacity;
+      transition: background-color $transition_time;
+
+      @media (max-width: $mobile) {
+        height: $small_margin;
+      }
+    }
+
+    // Fixed 10px dot
+    .dot {
+      width: $dot_size;
+      height: $dot_size;
+      border-radius: $circle_border_radius;
+      background-color: var(--color-text);
+      opacity: $less_less_opacity;
+      transition: background-color $transition_time;
+
+      @media (max-width: $mobile) {
+        width: $small_small_margin;
+        height: $small_small_margin;
+      }
+    }
+  }
+
+  // ----------------------------------------
+  // Toggle row — button + sound waves
+  // ----------------------------------------
+  .toggle_row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // Appear animation — slide in from right after slash closes
+    animation: appearFromRight $animation_time_small ease-out $animation_delay both;
+  }
+
+  // ----------------------------------------
+  // Toggle button
+  // ----------------------------------------
+  .toggle {
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+
+    // Icon
+    .icon {
+      width: $icon_size;
+      height: $icon_size;
+      background-color: var(--color-secondary);
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      transition:
+        background-color $transition_time,
+        mask-image 0s,
+        transform $animation_time_small ease;
+
+      :global(:root[data-theme='light']) & {
+        background-color: var(--color-tertiary);
+      }
+
+      @media (max-width: $mobile) {
+        width: $icon_size_mob;
+        height: $icon_size_mob;
+      }
+    }
+
+    .icon_active {
+      mask-image: url('/img/toggle/gong-active.svg');
+    }
+
+    .icon_mute {
+      mask-image: url('/img/toggle/gong-not-active.svg');
+    }
+  }
+
+  // ----------------------------------------
+  // Sound waves — animated bars when sound is active
+  // ----------------------------------------
+  .sound_waves {
+    position: absolute;
+    right: 100%;
+    margin-right: $small_margin;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: $icon_size;
+    // Appear animation — slide in from left (inverse of icon direction)
+    animation: appearFromLeft $animation_time_small ease-out $animation_delay_big both;
+
+    @media (max-width: $mobile) {
+      height: $icon_size_mob;
+      margin-right: $small_small_margin;
+    }
+
+    .bar {
+      width: $border_width_big;
+      height: $border_width_big;
+      background-color: var(--color-secondary);
+      border-radius: $small_border_radius;
+      animation: sound-wave-close $animation_time_small ease-out forwards;
+      opacity: $less_opacity;
+      transition:
+        background-color $transition_time,
+        height $transition_time;
+
+      :global(:root[data-theme='light']) & {
+        background-color: var(--color-tertiary);
+      }
+
+      @media (max-width: $mobile) {
+        width: $border_width;
+        height: $border_width;
+      }
+    }
+
+    // Active state — bars animate
+    &.sound_waves_active .bar {
+      animation: sound-wave $animation_time ease-in-out infinite both;
+
+      &:nth-child(1) {
+        animation-delay: 0s;
+      }
+
+      &:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+    }
+  }
+}
+
+// ==============================
+// ANIMATION
+// ==============================
+
+@keyframes appearFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX($animation_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes appearFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY($animation_negative_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes appearFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY($animation_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes appearFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX($animation_negative_margin);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Bars shrink back to dots when muting
+@keyframes sound-wave-close {
+  0% {
+    height: 20%;
+  }
+  100% {
+    height: $border_width_big;
+  }
+}
+
+@keyframes sound-wave {
+  0%,
+  100% {
+    height: 20%;
+  }
+
+  50% {
+    height: 80%;
+  }
+}
