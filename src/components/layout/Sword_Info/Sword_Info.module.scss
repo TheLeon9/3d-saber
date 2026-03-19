@@ -173,6 +173,7 @@
     transform: translate(-50%, -40%);
     font-size: 200px;
     color: var(--color-secondary);
+    opacity: $less_less_opacity;
     z-index: 1;
     pointer-events: none;
     user-select: none;

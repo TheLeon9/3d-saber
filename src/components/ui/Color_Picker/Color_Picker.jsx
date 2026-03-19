@@ -17,6 +17,17 @@ export default function Color_Picker({ onHoverChange }) {
 
   // Refs
   const pickerRef = useRef(null);
+  const lastSoundTime = useRef(0);
+
+  // Handlers
+  // Debounced sound — prevents double-play when reset closes an open picker
+  const playSoundOnce = () => {
+    const now = Date.now();
+    if (now - lastSoundTime.current > 150) {
+      playSound('metal');
+      lastSoundTime.current = now;
+    }
+  };
 
   // ----------------------------------------
   // Render
@@ -42,7 +53,7 @@ export default function Color_Picker({ onHoverChange }) {
       {/* Reset Button */}
       <button
         className={styles.reset_btn}
-        onClick={() => { playSound('metal'); resetSwordColors(); }}
+        onClick={() => { playSoundOnce(); resetSwordColors(); }}
         onMouseEnter={() => onHoverChange?.(true)}
         onMouseLeave={() => onHoverChange?.(false)}
         aria-label="Reset colors"
@@ -71,7 +82,8 @@ export default function Color_Picker({ onHoverChange }) {
                 id={`color-${key}`}
                 type="color"
                 value={swordColors[key]}
-                onChange={(e) => { playSound('metal'); updateSwordColor(key, e.target.value); }}
+                onChange={(e) => updateSwordColor(key, e.target.value)}
+                onBlur={playSoundOnce}
                 className={styles.input}
               />
               <span
