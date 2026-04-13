@@ -4,7 +4,6 @@
 
 import { useEffect, useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
-import * as THREE from 'three';
 
 // === CONSTANTS ===
 
@@ -59,7 +58,6 @@ export default function Katana({ swordColors }) {
         child.material.color.set(color);
         child.material.metalness = mapping.metalness;
         child.material.roughness = mapping.roughness;
-        child.material.needsUpdate = true;
       }
     });
   }, [swordColors, scene]);

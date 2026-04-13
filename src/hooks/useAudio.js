@@ -90,7 +90,7 @@ export default function useAudio(isSoundOn, currentScene) {
     intervalTimersRef.current.forEach((id) => clearTimeout(id));
     intervalTimersRef.current = [];
 
-    // Fade out all previous scene tracks
+    // Fade out previous tracks, then destroy them
     if (prevTracks.length > 0) {
       const fadeOut = () => {
         let stillFading = false;
@@ -100,8 +100,8 @@ export default function useAudio(isSoundOn, currentScene) {
             stillFading = true;
           } else {
             track.pause();
-            track.currentTime = 0;
-            track.volume = SCENE_VOLUME;
+            track.onended = null;
+            track.src = '';
           }
         });
         if (stillFading) fadeRef.current = requestAnimationFrame(fadeOut);
@@ -144,7 +144,6 @@ export default function useAudio(isSoundOn, currentScene) {
             music.onended = scheduleNext;
           }, delay);
           newTimers.push(timerId);
-          intervalTimersRef.current = newTimers;
         };
         scheduleNext();
       } else {
@@ -156,6 +155,7 @@ export default function useAudio(isSoundOn, currentScene) {
     });
 
     sceneMusicRef.current = newTracks;
+    intervalTimersRef.current = newTimers;
 
     if (isSoundOn) {
       // Only auto-play looping tracks, interval tracks handle their own playback
@@ -218,16 +218,16 @@ export default function useAudio(isSoundOn, currentScene) {
 
   // Cleanup on unmount
   useEffect(() => {
-    if (fadeRef.current) cancelAnimationFrame(fadeRef.current);
-
     return () => {
+      if (fadeRef.current) cancelAnimationFrame(fadeRef.current);
       Object.values(audioRefs.current).forEach((audio) => {
         audio.pause();
-        audio.currentTime = 0;
+        audio.src = '';
       });
       sceneMusicRef.current.forEach((music) => {
         music.pause();
-        music.currentTime = 0;
+        music.onended = null;
+        music.src = '';
       });
       intervalTimersRef.current.forEach((id) => clearTimeout(id));
     };

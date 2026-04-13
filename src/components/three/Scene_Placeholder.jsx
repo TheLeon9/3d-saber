@@ -44,18 +44,35 @@ function ZoomHandler() {
 // ----------------------------------------
 // RotatableMesh — drag to rotate the mesh only (not the scene)
 // ----------------------------------------
-function RotatableMesh({ swordColors }) {
+const INITIAL_ROTATION = [1.570, -0.565, -0.150];
+
+function RotatableMesh({ swordColors, rotationResetKey }) {
   const meshRef = useRef(); // 3D mesh to rotate
   const isDragging = useRef(false); // Whether user is currently dragging
   const prevMouse = useRef({ x: 0, y: 0 }); // Last mouse position for delta calculation
-  const velocity = useRef(0); // Y-axis momentum after drag release
+  const velocity = useRef({ x: 0, y: 0 }); // Momentum after drag release
   const { gl } = useThree();
 
-  // Smooth momentum when not dragging — Y rotation only
+  // Animate back to initial rotation on reset
+  useEffect(() => {
+    if (!meshRef.current || rotationResetKey === 0) return;
+    velocity.current = { x: 0, y: 0 };
+    gsap.to(meshRef.current.rotation, {
+      x: INITIAL_ROTATION[0],
+      y: INITIAL_ROTATION[1],
+      z: INITIAL_ROTATION[2],
+      duration: 0.8,
+      ease: 'power2.inOut',
+    });
+  }, [rotationResetKey]);
+
+  // Smooth momentum when not dragging
   useFrame(() => {
     if (!meshRef.current || isDragging.current) return;
-    velocity.current *= 0.95;
-    meshRef.current.rotation.z += velocity.current;
+    velocity.current.x *= 0.95;
+    velocity.current.y *= 0.95;
+    meshRef.current.rotation.z += velocity.current.x;
+    meshRef.current.rotation.y += velocity.current.y;
   });
 
   useEffect(() => {
@@ -69,8 +86,10 @@ function RotatableMesh({ swordColors }) {
     const onPointerMove = (e) => {
       if (!isDragging.current || !meshRef.current) return;
       const dx = (e.clientX - prevMouse.current.x) * 0.01;
+      const dy = (e.clientY - prevMouse.current.y) * 0.01;
       meshRef.current.rotation.z += dx;
-      velocity.current = dx;
+      meshRef.current.rotation.y += dy;
+      velocity.current = { x: dx, y: dy };
       prevMouse.current = { x: e.clientX, y: e.clientY };
     };
 
@@ -92,7 +111,7 @@ function RotatableMesh({ swordColors }) {
   }, [gl]);
 
   return (
-    <group ref={meshRef} rotation={[Math.PI / 2 , 0, 0]}>
+    <group ref={meshRef} rotation={INITIAL_ROTATION}>
       <Suspense fallback={null}>
         <Katana swordColors={swordColors} />
       </Suspense>
@@ -109,7 +128,7 @@ export default function Scene_Placeholder() {
   // ----------------------------------------
   // State
   // ----------------------------------------
-  const { scene, isLoading, currentScene, swordColors } = useTheme();
+  const { scene, isLoading, currentScene, swordColors, rotationResetKey } = useTheme();
   const moonRef = useRef(null); // Decorative moon element for GSAP animation
   const hasAppeared = useRef(false); // Prevents re-triggering the entrance animation
 
@@ -143,12 +162,12 @@ export default function Scene_Placeholder() {
       {/* Three.js particle layer */}
       <div className={styles.three_canvas}>
         <Canvas
-          camera={{ position: [0, 0, 2], fov: 60 }}
+          camera={{ position: [0, 0, 1], fov: 60 }}
           gl={{ alpha: true, antialias: false }}
           dpr={[1, 1.5]}
         >
           {/* Katana model — drag to rotate, scroll to zoom */}
-          <RotatableMesh swordColors={swordColors} />
+          <RotatableMesh swordColors={swordColors} rotationResetKey={rotationResetKey} />
           <ZoomHandler />
           <ambientLight intensity={0.5} />
           <directionalLight position={[2, 3, 4]} intensity={1} />

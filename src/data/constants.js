@@ -114,16 +114,6 @@ export const SCENES = {
     },
   },
 };
-// === DEFAULT SWORD COLORS ===
-
-export const DEFAULT_SWORD_COLORS = {
-  blade: '#c0c0c0', // Silver steel
-  guard: '#8b7355', // Bronze iron
-  handle: '#4a3728', // Dark leather wrap
-  pommel: '#b08d57', // Aged bronze
-  scabbard: '#2c1810', // Dark lacquer
-};
-
 // === SWORD PARTS ===
 
 export const SWORD_PARTS = {

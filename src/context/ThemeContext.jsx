@@ -11,12 +11,7 @@ import {
   useCallback,
   useRef,
 } from 'react';
-import {
-  SCENES,
-  SCENE_ORDER,
-  DEFAULT_SCENE,
-  DEFAULT_SWORD_COLORS,
-} from '@/data/constants';
+import { SCENES, SCENE_ORDER, DEFAULT_SCENE } from '@/data/constants';
 import useAudio from '@/hooks/useAudio';
 
 // === CONSTANTS ===
@@ -26,10 +21,10 @@ const TRANSITION_DURATION = 600;
 // Map scene colors to sword parts
 function swordColorsFromScene(colors) {
   return {
-    blade: colors.secondary,
-    guard: colors.tertiary,
+    blade: colors.primary,
+    guard: colors.secondary,
     handle: colors.tertiary,
-    pommel: colors.primary,
+    pommel: colors.secondary,
     scabbard: colors.tertiary,
   };
 }
@@ -47,7 +42,10 @@ export function ThemeProvider({ children }) {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isSoundOn, setIsSoundOn] = useState(false);
-  const [swordColors, setSwordColors] = useState(DEFAULT_SWORD_COLORS);
+  const [swordColors, setSwordColors] = useState(
+    swordColorsFromScene(SCENES[DEFAULT_SCENE].colors)
+  );
+  const [rotationResetKey, setRotationResetKey] = useState(0);
   const transitionTimeoutRef = useRef(null);
 
   // Audio — SFX, ambiance, and scene music management
@@ -72,6 +70,8 @@ export function ThemeProvider({ children }) {
 
       transitionTimeoutRef.current = setTimeout(() => {
         setCurrentScene(newScene);
+        setSwordColors(swordColorsFromScene(SCENES[newScene].colors));
+        setRotationResetKey((k) => k + 1);
 
         transitionTimeoutRef.current = setTimeout(() => {
           setIsTransitioning(false);
@@ -111,6 +111,7 @@ export function ThemeProvider({ children }) {
   const commitThemeChange = useCallback(() => {
     setIsDarkMode(pendingDarkMode);
     setIsThemeChanging(false);
+    setRotationResetKey((k) => k + 1);
   }, [pendingDarkMode]);
 
   // Direct toggle (kept for programmatic use)
@@ -128,10 +129,11 @@ export function ThemeProvider({ children }) {
     setSwordColors((prev) => ({ ...prev, [part]: color }));
   }, []);
 
-  // Reset sword colors to factory defaults
+  // Reset sword colors and rotation to current scene defaults
   const resetSwordColors = useCallback(() => {
-    setSwordColors(DEFAULT_SWORD_COLORS);
-  }, []);
+    setSwordColors(swordColorsFromScene(scene.colors));
+    setRotationResetKey((k) => k + 1);
+  }, [scene]);
 
   // Effects: Sync CSS variables for scene colors and theme mode
   useEffect(() => {
@@ -179,6 +181,7 @@ export function ThemeProvider({ children }) {
       swordColors,
       updateSwordColor,
       resetSwordColors,
+      rotationResetKey,
       playSound,
     }),
     [
@@ -200,6 +203,7 @@ export function ThemeProvider({ children }) {
       swordColors,
       updateSwordColor,
       resetSwordColors,
+      rotationResetKey,
       playSound,
     ]
   );

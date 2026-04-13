@@ -7,14 +7,14 @@ import '@/styles/globals.scss';
 
 const cinzel = Cinzel({
   subsets: ['latin'],
-  weight: ['400', '600', '700'],
+  weight: ['400', '900'],
   variable: '--font-cinzel',
   display: 'swap',
 });
 
 const nunito = Nunito({
   subsets: ['latin'],
-  weight: ['300', '400', '600', '700'],
+  weight: ['400', '900'],
   variable: '--font-nunito',
   display: 'swap',
 });
@@ -55,8 +55,8 @@ export const metadata = {
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  maximumScale: 5,
+  userScalable: true,
 };
 
 // === COMPONENT ===

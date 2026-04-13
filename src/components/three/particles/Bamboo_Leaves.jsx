@@ -4,7 +4,7 @@
 
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
+import { CanvasTexture } from 'three';
 
 // === CONSTANTS ===
 
@@ -34,7 +34,7 @@ function createLeafTexture() {
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(1, 2, 2, 12);
-  const texture = new THREE.CanvasTexture(canvas);
+  const texture = new CanvasTexture(canvas);
   return texture;
 }
 
